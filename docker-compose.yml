@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  nginx: 
+    build: 
+      dockerfile: Dockerfile
+      context: './nginx'
+    ports: 
+      - 3050:80
+    restart: always
+    depends_on:
+      - graphql
+      - graphqlf
+      
+  graphql:
+    build:
+      dockerfile: Dockerfile
+      context: './graphql'
+    ports:
+      - 4000:4000
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/graphql
+    volumes: 
+      - .:/usr/src
+      - /usr/src/node_modules
+
+  graphqlf:
+    build:
+      dockerfile: Dockerfile
+      context: './graphqlf'
+    ports:
+      - 3000:3000
+    volumes: 
+      - .:/usr/src
+      - /usr/src/node_modules
